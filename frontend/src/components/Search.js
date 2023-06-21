@@ -1,6 +1,6 @@
-import React from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
-const Search = ({query, setQuery, handleSubmit}) => {
+import React from 'react';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+const Search = ({ query, setQuery, handleSubmit }) => {
   return (
     <Container className="mt-4">
       <Row className="justify-content-center">
@@ -8,15 +8,17 @@ const Search = ({query, setQuery, handleSubmit}) => {
           <Form onSubmit={handleSubmit}>
             <Row>
               <Col xs={9}>
-                <Form.Control 
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)} 
-                placeholder="Search for a new image..." 
+                <Form.Control
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search for a new image..."
                 />
               </Col>
               <Col>
-                <Button variant="primary" type="submit">Search</Button>
+                <Button variant="primary" type="submit">
+                  Search
+                </Button>
               </Col>
             </Row>
           </Form>
