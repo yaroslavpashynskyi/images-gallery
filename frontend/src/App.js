@@ -7,6 +7,9 @@ const UNSPLASH_KEY = process.env.REACT_APP_UNSPLASH_API;
 
 function App() {
   const [query, setQuery] = useState('');
+  const [images, setImages] = useState([]);
+
+  console.log(images);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -16,7 +19,7 @@ function App() {
     )
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        setImages([data, ...images]);
       })
       .catch((error) => console.log(error));
 
