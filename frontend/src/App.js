@@ -5,6 +5,7 @@ import { useState } from 'react';
 import ImageCard from './components/ImageCard';
 import { Container, Row, Col } from 'react-bootstrap';
 import Welcome from './components/Welcome';
+import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5050';
 
@@ -12,14 +13,14 @@ function App() {
   const [query, setQuery] = useState('');
   const [images, setImages] = useState([]);
 
-  const handleSearchSubmit = (e) => {
+  const handleSearchSubmit = async (e) => {
     e.preventDefault();
-    fetch(`${API_URL}/new-image?query=${query}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setImages([{ ...data, title: query }, ...images]);
-      })
-      .catch((error) => console.log(error));
+    try {
+      const result = await axios.get(`${API_URL}/new-image?query=${query}`);
+      setImages([{ ...result.data, title: query }, ...images]);
+    } catch (error) {
+      console.log(error);
+    }
 
     setQuery('');
   };
