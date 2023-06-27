@@ -1,7 +1,7 @@
 import 'bootswatch/dist/minty/bootstrap.min.css';
 import Header from './components/Header';
 import Search from './components/Search';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ImageCard from './components/ImageCard';
 import { Container, Row, Col } from 'react-bootstrap';
 import Welcome from './components/Welcome';
@@ -12,6 +12,19 @@ const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5050';
 function App() {
   const [query, setQuery] = useState('');
   const [images, setImages] = useState([]);
+
+  const getSavedImages = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/images`);
+      setImages(res.data || []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getSavedImages();
+  }, []);
 
   const handleSearchSubmit = async (e) => {
     e.preventDefault();
