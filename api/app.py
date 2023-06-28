@@ -44,7 +44,8 @@ def images():
     if request.method == "POST":
         image = request.get_json()
         image["_id"] = image.get("id")
-        return jsonify(images_collection.insert_one(image).inserted_id)
+
+        return jsonify({"inserted_id": images_collection.insert_one(image).inserted_id})
 
 
 if __name__ == "__main__":
