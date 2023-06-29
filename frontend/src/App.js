@@ -38,8 +38,20 @@ function App() {
     setQuery('');
   };
 
-  const handleDeleteImage = (id) => {
-    setImages(images.filter((images) => images.id !== id));
+  const handleDeleteImage = async (id, isSaved) => {
+    try {
+      if (isSaved) {
+        const res = await axios.delete(`${API_URL}/images/${id}`);
+
+        if (res.data?.deleted_id) {
+          setImages(images.filter((images) => images.id !== id));
+        }
+      } else {
+        setImages(images.filter((images) => images.id !== id));
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handeSaveImage = async (id) => {
