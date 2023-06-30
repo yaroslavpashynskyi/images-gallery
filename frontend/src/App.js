@@ -1,6 +1,8 @@
 import 'bootswatch/dist/minty/bootstrap.min.css';
 import Header from './components/Header';
 import Search from './components/Search';
+import { Flip, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState } from 'react';
 import ImageCard from './components/ImageCard';
 import { Container, Row, Col } from 'react-bootstrap';
@@ -20,8 +22,9 @@ function App() {
       const res = await axios.get(`${API_URL}/images`);
       setImages(res.data || []);
       setLoading(false);
+      if (res.data?.length) toast.success('Saved images downloaded');
     } catch (error) {
-      console.log(error);
+      toast.error(error.message);
     }
   };
 
@@ -32,10 +35,16 @@ function App() {
   const handleSearchSubmit = async (e) => {
     e.preventDefault();
     try {
-      const result = await axios.get(`${API_URL}/new-image?query=${query}`);
-      setImages([{ ...result.data, title: query }, ...images]);
+      const res = await axios.get(`${API_URL}/new-image?query=${query}`);
+      console.log(res);
+      if (res.data?.errors?.length) {
+        throw new Error(res.data.errors[0]);
+      }
+      setImages([{ ...res.data, title: query }, ...images]);
+
+      toast.info(`New image "${query.toUpperCase()}" was found`);
     } catch (error) {
-      console.log(error);
+      toast.error(error.message);
     }
 
     setQuery('');
@@ -52,8 +61,11 @@ function App() {
       } else {
         setImages(images.filter((images) => images.id !== id));
       }
+      const imageToDelete = images.find((image) => image.id === id);
+
+      toast.warn(`Image "${imageToDelete.title.toUpperCase()}" was deleted`);
     } catch (error) {
-      console.log(error);
+      toast.error(error.message);
     }
   };
 
@@ -69,8 +81,9 @@ function App() {
           )
         );
       }
+      toast.info(`Image "${imageToSave.title?.toUpperCase()}" was saved`);
     } catch (error) {
-      console.log(error);
+      toast.error(error.message);
     }
   };
 
@@ -105,6 +118,7 @@ function App() {
           </Container>
         </>
       )}
+      <ToastContainer position="bottom-right" transition={Flip} />
     </div>
   );
 }
